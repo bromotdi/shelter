@@ -30,6 +30,7 @@
         animation-duration: 1s;
     }
 }
+
 @keyframes moveRight{
     from{
         left: calc(0% + (100% + 50px));
