@@ -90,7 +90,9 @@
   
 .main_current_link{
     border-bottom: 3px solid $color-primary;
+    pointer-events: none;
 }
+
 .logo_text{
     font-weight: 400;
     font-size: 32px;
