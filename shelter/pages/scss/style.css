@@ -440,6 +440,7 @@ a {
 
 .main_current_link {
   border-bottom: 3px solid #F1CDB3;
+  pointer-events: none;
 }
 
 .logo_text {
