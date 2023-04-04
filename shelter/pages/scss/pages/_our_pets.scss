@@ -10,17 +10,16 @@
     padding-top: 30px;
 }
 .our_pets_absolute{
-    position: fixed;
     background-color: $color-light-xl;
     width: 100%;
     padding-bottom: 4px;
 }
 
 .our_pets_wrapper{
-    padding-top: 200px;
+    //padding-top: 200px;
     padding-bottom: 0px;
     @media screen and (max-width: $tablet) {
-        padding-top: 162px;
+    //    padding-top: 162px;
         padding-bottom: 24px;
     }
 }
@@ -73,9 +72,7 @@
         }
     }
     }
-.pets_card_our_pets{
-    //margin-bottom: 30px;
-}
+
 .our_pets_pets_p{
     padding-left: 3px;
 }
