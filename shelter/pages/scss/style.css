@@ -357,7 +357,7 @@ a {
   }
 }
 .wrapper {
-  padding: 30px 30px 27px 30px;
+  padding: 30px 30px 30px 30px;
   width: 95.75%;
   max-width: 1200px;
   margin: 0 auto;
@@ -381,7 +381,6 @@ a {
 @media screen and (max-width: 1279.5px) {
   .wrapper {
     padding-top: 31px;
-    padding-bottom: 26px;
     width: 100%;
   }
 }
@@ -391,7 +390,7 @@ a {
     margin: 0%;
     padding: 0px;
     padding-top: 31px;
-    padding-bottom: 25px;
+    padding-bottom: 30px;
   }
 }
 
@@ -510,13 +509,14 @@ a {
 }
 
 .background_gradient {
-  margin-top: -147px;
+  margin-top: -117px;
   padding-top: 180px;
   background: url(../../assets/images/noise_transparent@2x.png), radial-gradient(100% 215.42% at 0% 0%, #5B483A 0%, #262425 100%);
   display: flex;
 }
 @media screen and (max-width: 1279.5px) {
   .background_gradient {
+    margin-top: -147px;
     padding-top: 181px;
   }
 }
@@ -1473,19 +1473,15 @@ a {
 }
 
 .our_pets_absolute {
-  position: fixed;
   background-color: #FFFFFF;
   width: 100%;
-  padding-bottom: 4px;
 }
 
 .our_pets_wrapper {
-  padding-top: 200px;
   padding-bottom: 0px;
 }
 @media screen and (max-width: 767.5px) {
   .our_pets_wrapper {
-    padding-top: 162px;
     padding-bottom: 24px;
   }
 }
