@@ -1,8 +1,7 @@
 const ROUNDABOUT = document.getElementById('roundabout')
-let counter = 0
-let roundaboutType = true
-let allPets = []
+let counter = 1, cardsQuantity, allPets
 
+(window.matchMedia("(min-width: 1280px)").matches)?(cardsQuantity = 8):(window.matchMedia("(max-width: 767px)").matches?cardsQuantity = 3:cardsQuantity = 6)
 async function getPets() {
     const petsData = '../../assets/data/pets.json';
     const res = await fetch(petsData);
@@ -12,26 +11,29 @@ async function getPets() {
 
 let pets = 0
 
-getPets().then( item => {
+getPets().then(item => {
     pets = item
     createPets()
-    for (let i = 0; i < (ROUNDABOUT.children.length) ; i++) {
-        activeCardEdit(i, 0)
-    }
+    cardEdit()
 });
 
+function cardEdit() {
+    for (let i = 0; i < (cardsQuantity) ; i++) {
+        ROUNDABOUT.children[i].children[0].src = allPets[i+(counter-1)*cardsQuantity].img
+        ROUNDABOUT.children[i].children[0].alt = allPets[i+(counter-1)*cardsQuantity].type
+        ROUNDABOUT.children[i].petId = (i+(counter-1)*cardsQuantity)
+        ROUNDABOUT.children[i].children[1].innerText = allPets[i+(counter-1)*cardsQuantity].name
+    }
+}
+
 function createPets() {
-    allPets = [pets[0], pets[1], pets[2]]
-    let itemArray = [pets[3], pets[4], pets[5]]
-    randomizePets(itemArray)
-    itemArray = [pets[6], pets[7]]
-    randomizePets(itemArray)
+    allPets = [...pets]
     for (let a = 0;a<5;a++){
-        let itemArray = [pets[0], pets[1], pets[2]]
+        let itemArray = [allPets[0], allPets[1], allPets[2]]
         randomizePets(itemArray)
-        itemArray = [pets[3], pets[4], pets[5]]
+        itemArray = [allPets[3], allPets[4], allPets[5]]
         randomizePets(itemArray)
-        itemArray = [pets[6], pets[7]]
+        itemArray = [allPets[6], allPets[7]]
         randomizePets(itemArray)
     }
 }
@@ -44,57 +46,31 @@ function randomizePets(itemArray) {
     }
 }
 
-function activeCardEdit(cardPosition, petsOffset) {
-    for (let i = 0; i < (ROUNDABOUT.children[cardPosition].children.length) ; i++){
-        let item = petsOffset+i;
-        (item<0) ? item=(item%allPets.length+allPets.length) : item;
-        (item >= allPets.length) ? item=item%allPets.length : item;
-        ROUNDABOUT.children[cardPosition].children[i].children[0].src = allPets[item].img
-        ROUNDABOUT.children[cardPosition].children[i].children[0].alt = allPets[item].type
-        ROUNDABOUT.children[cardPosition].children[i].petId = item
-        ROUNDABOUT.children[cardPosition].children[i].children[1].innerText = allPets[item].name
+window.addEventListener('resize', () => {
+    const item = cardsQuantity;
+    (window.matchMedia("(min-width: 1280px)").matches)?(cardsQuantity = 8):(window.matchMedia("(max-width: 767px)").matches?cardsQuantity = 3:cardsQuantity = 6)
+    if (item !== cardsQuantity) {
+        counter = 1
+        cardEdit()
+        document.getElementById('currentButton').innerHTML = counter
+        prev.disabled = true
+        toStart.disabled = true
+        next.disabled = false
+        toEnd.disabled = false
     }
-}
-
-function rndCounter(offset) {
-    if (roundaboutType === false) {
-        counter = counter +3;
-        (counter>=allPets.length) ? counter = counter%allPets.length : counter;
-    }
-    if (roundaboutType === true) {
-        counter = counter + offset
-    }
-}
-
-btnLeft.onclick = function() {
-    activeCardEdit(2,(counter))
-    rndCounter(-3)
-    activeCardEdit(1,(counter))
-    btnRight.disabled = true
-    btnLeft.disabled = true
-    ROUNDABOUT.classList.add("transitionLeft")
-}
-
-btnRight.onclick = function() {
-    activeCardEdit(0,counter)
-    rndCounter(3)
-    activeCardEdit(1,counter)
-    btnRight.disabled = true
-    btnLeft.disabled = true
-    ROUNDABOUT.classList.add("transitionRight")
-}
+})
 
 exitModalWindow.onclick = () => {
     modalWindow.style.display = "none"
     document.body.style.overflow = "auto"
-    modalShadow.style.display = "none"
+    modalshadow.style.display = "none"
 }
 
 ROUNDABOUT.addEventListener('click', (e) => {
     if (e.target.closest('.pets_card') != null) {
         document.body.style.overflow = "hidden"
         modalWindow.style.display = "flex"
-        modalShadow.style.display = "flex"
+        modalshadow.style.display = "flex"
         const item = e.target.closest('.pets_card').petId
         modalWindow.children[1].children[0].src = allPets[item].img
         modalWindow.children[1].children[0].alt = allPets[item].type
@@ -108,25 +84,19 @@ ROUNDABOUT.addEventListener('click', (e) => {
     }
 })
 
-ROUNDABOUT.addEventListener("animationend", (animationEvent) => {
-    ROUNDABOUT.classList.remove("transitionLeft")
-    ROUNDABOUT.classList.remove("transitionRight")
-    btnRight.disabled = false
-    btnLeft.disabled = false
-})
-
 burgerShadow.onclick = () => {
     burgerShadow.style.display = "none"
 }
 
 burgerMenu.onclick = function() {
-    if (burgerMenu.checked) {
+    if (burgerMenu.checked){
         document.body.style.overflow = "hidden"
         burgerShadow.style.display = "flex"
         burgerShadow.style.cursor = "pointer"
         burgerShadow.style.zIndex = '-1'
         document.getElementById('logo').classList.add("logoBurger")
-        document.getElementById('menuNav').addEventListener('click', () => {
+        document.getElementById('menuNav').classList.add("petsNavMenu")
+        document.getElementById('menuNav').addEventListener('click', ()=>{
             document.body.style.overflow = "auto"
             burgerShadow.style.display = "none"
             document.getElementById('logo').classList.remove("logoBurger")
@@ -134,11 +104,61 @@ burgerMenu.onclick = function() {
         })
     }
 
-    else{
+    else {
         document.body.style.overflow = "auto"
         document.getElementById('logo').classList.remove("logoBurger")
+        document.getElementById('menuNav').classList.remove("petsNavMenu")
         burgerShadow.style.display = "none"
     }
 }
 
+toStart.onclick = function() {
+    counter = 1
+    cardEdit()
+    document.getElementById('currentButton').innerHTML = counter
+    prev.disabled = true
+    toStart.disabled = true
+    next.disabled = false
+    toEnd.disabled = false
+}
+
+prev.onclick = function() {
+    counter--
+    cardEdit()
+    document.getElementById('currentButton').innerHTML = counter
+    if (counter === 1) {
+        prev.disabled = true
+        toStart.disabled = true
+    }
+    if (counter < (allPets.length/cardsQuantity)) {
+        next.disabled = false
+        toEnd.disabled = false
+    }
+}
+
+next.onclick = function() {
+    counter++
+    cardEdit()
+    document.getElementById('currentButton').innerHTML = counter
+    if (counter > 1) {
+        prev.disabled = false
+        toStart.disabled = false
+    }
+    if (counter === (allPets.length/cardsQuantity)) {
+        next.disabled = true
+        toEnd.disabled = true
+    }
+}
+
+toEnd.onclick = function() {
+    counter = (allPets.length/cardsQuantity)
+    cardEdit()
+    document.getElementById('currentButton').innerHTML = counter
+    next.disabled = true
+    toEnd.disabled = true
+    prev.disabled = false
+    toStart.disabled = false
+}
+
 console.log('Score: 110/110 \n Реализация burger menu на обеих страницах: +26 \n Реализация слайдера-карусели на странице Main: +36 \n Реализация пагинации на странице Pets: +36 \n Реализация попап на обеих страницах: +12 \n')
+
